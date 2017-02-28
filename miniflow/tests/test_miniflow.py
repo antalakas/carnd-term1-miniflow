@@ -130,4 +130,4 @@ class TestMiniflow(unittest.TestCase):
         print("{} * {} + {} = {} (according to miniflow)".format(feed_dict[X], feed_dict[W], feed_dict[b],
                                                                  output))
 
-        # self.assertEqual(output, [[-9., 4.], [-9., 4.]])
+        self.assertTrue(np.array_equal(output, np.array([[-9., 4.], [-9., 4.]])))
