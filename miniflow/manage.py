@@ -46,5 +46,5 @@ if __name__ == "__main__":
             call(["python", "setup.py", "install"])
 
     except KeyboardInterrupt:
-        print "\n"
+        print("\n")
 

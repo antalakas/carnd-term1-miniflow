@@ -1,6 +1,7 @@
 """
 You need to change the Add() class below.
 """
+import numpy as np
 
 class Node(object):
     def __init__(self, inbound_nodes=[]):
@@ -44,8 +45,50 @@ class Input(Node):
         if value is not None:
             self.value = value
 
+class LinearSimple(Node):
+    def __init__(self, inputs, weights, bias):
+        Node.__init__(self, [inputs, weights, bias])
 
-class Add(Node):
+        # NOTE: The weights and bias properties here are not
+        # numbers, but rather references to other nodes.
+        # The weight and bias values are stored within the
+        # respective nodes.
+        self.inputs = inputs
+        self.weights = weights
+        self.bias = bias
+
+    def forward(self):
+        """
+        Set self.value to the value of the linear function output.
+
+        Your code goes here!
+        """
+        inputs = self.inbound_nodes[0].value
+        weights = self.inbound_nodes[1].value
+        bias = self.inbound_nodes[2].value
+        self.value = bias
+        for input_data, weight in zip(inputs, weights):
+            self.value += input_data * weight
+
+
+class Linear(Node):
+    def __init__(self, X, W, b):
+        # Notice the ordering of the input nodes passed to the
+        # Node constructor.
+        Node.__init__(self, [X, W, b])
+
+    def forward(self):
+        """
+        Set the value of this node to the linear transform output.
+
+        Your code goes here!
+        """
+        Xmn = self.inbound_nodes[0].value
+        Wnk = self.inbound_nodes[1].value
+        bk = self.inbound_nodes[2].value
+        self.value = np.dot(Xmn, Wnk) + bk
+
+class AddTwo(Node):
     def __init__(self, x, y):
         # You could access `x` and `y` in forward with
         # self.inbound_nodes[0] (`x`) and self.inbound_nodes[1] (`y`)
@@ -57,7 +100,43 @@ class Add(Node):
 
         Your code here!
         """
+        self.value = self.inbound_nodes[0].value + self.inbound_nodes[1].value
 
+class Add(Node):
+    def __init__(self, *args):
+        # You could access `x` and `y` in forward with
+        # self.inbound_nodes[0] (`x`) and self.inbound_nodes[1] (`y`)
+        input_array = []
+        for a in args:
+            input_array.append(a)
+
+        Node.__init__(self, input_array)
+
+    def forward(self):
+        """
+        Set the value of this node (`self.value`) to the sum of it's inbound_nodes.
+
+        Your code here!
+        """
+        self.value = 0
+        for n in self.inbound_nodes:
+            self.value += n.value
+
+class Mul(Node):
+    def __init__(self, *args):
+        # You could access `x` and `y` in forward with
+        # self.inbound_nodes[0] (`x`) and self.inbound_nodes[1] (`y`)
+        Node.__init__(self, [*args])
+
+    def forward(self):
+        """
+        Set the value of this node (`self.value`) to the sum of it's inbound_nodes.
+
+        Your code here!
+        """
+        self.value = 1
+        for n in self.inbound_nodes:
+            self.value *= n.value
 
 """
 No need to change anything below here!
@@ -119,6 +198,7 @@ def forward_pass(output_node, sorted_nodes):
     """
 
     for n in sorted_nodes:
+        # print(n.value)
         n.forward()
 
     return output_node.value

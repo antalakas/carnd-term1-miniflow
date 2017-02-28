@@ -17,7 +17,7 @@ import unittest
 #///////////////////////////////////////////////////
 # miniflow Tests
 #---------------------------------------------------
-from test_miniflow import TestMiniflow
+from tests.test_miniflow import TestMiniflow
 #---------------------------------------------------
 
 #///////////////////////////////////////////////////
@@ -30,7 +30,12 @@ def test_suite():
     allTests = unittest.TestSuite()
 
     # Adding TestMiniflow tests
-    allTests.addTest(TestMiniflow('test_print_name'))
+    allTests.addTest(TestMiniflow('forward_propagation'))
+    allTests.addTest(TestMiniflow('add_x_y_y'))
+    allTests.addTest(TestMiniflow('add_multiple'))
+    allTests.addTest(TestMiniflow('mul_multiple'))
+    allTests.addTest(TestMiniflow('learning_and_loss'))
+    allTests.addTest(TestMiniflow('learning_transform'))
 
     return allTests
 
